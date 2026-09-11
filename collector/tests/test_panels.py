@@ -146,6 +146,7 @@ def test_build_dashboard_full_shape(tmp_path):
     assert borrow["chg_1d_bp"] is None      # no history yet for this ref
     assert borrow["chg_1w_bp"] is None
     assert dash["panels"]["insights"]["alerts"] == []
+    assert dash["panels"]["insights"]["delivery"]["state"] == "disabled"
 
 
 def test_build_dashboard_empty_store(tmp_path):
@@ -160,6 +161,7 @@ def test_build_dashboard_empty_store(tmp_path):
     assert dash["panels"]["morpho"]["rows"] == []
     assert dash["panels"]["refs"] == {"rows": [], "updated_at": None, "source": None}
     assert dash["panels"]["insights"]["newsletter"]["headline"] == "No automated digest yet"
+    assert dash["panels"]["insights"]["delivery"]["state"] == "disabled"
 
 
 def test_malformed_equity_quote_skipped_not_500(tmp_path):

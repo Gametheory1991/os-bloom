@@ -69,7 +69,7 @@ NBER recession shading, and an optional second series on a right-hand axis
 ## Quickstart
 
 You need Docker and a free [FRED API key](https://fred.stlouisfed.org/docs/api/api_key.html)
-(instant, email only).
+(instant, email only). Gmail delivery is optional and uses an app password.
 
 ```bash
 git clone https://github.com/Gametheory1991/os-bloom.git && cd os-bloom
@@ -80,6 +80,15 @@ docker compose up --build
 Open <http://localhost:8080>. Panels fill in as the scheduler's first fetches
 land — most within a minute, the daily cycle job on its first tick.
 
+To open it from your phone on the same Wi‑Fi, use your computer's LAN IP:
+
+```bash
+hostname -I
+```
+
+Then open `http://<that-ip>:8080` on your phone. If you want the digest email
+to include a clickable mobile-safe link, set `DASHBOARD_URL` in `.env`.
+
 Port 8080 already taken? Set `UI_PORT`:
 
 ```bash
@@ -87,7 +96,29 @@ UI_PORT=9090 docker compose up --build
 ```
 
 `GET /healthz` reports, per fetcher, its last run, the source actually used,
-and any error. `GET /api/insights` returns the current automated digest.
+and any error. `GET /api/insights` returns the current automated digest and
+newsletter delivery state.
+
+### Gmail newsletter delivery
+
+Set these in `/home/runner/work/os-bloom/os-bloom/.env` to enable real email
+delivery of the digest:
+
+```bash
+SMTP_ENABLED=1
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=465
+SMTP_USE_SSL=1
+SMTP_STARTTLS=0
+SMTP_USERNAME=yourname@gmail.com
+SMTP_PASSWORD=your_gmail_app_password
+SMTP_FROM=yourname@gmail.com
+SMTP_TO=recipient@example.com
+DASHBOARD_URL=http://<your-lan-ip>:8080
+```
+
+The collector sends the digest over SMTP after a fresh `insights` digest is
+generated and avoids duplicate sends for the same digest content.
 
 <details>
 <summary><b>Running without Docker</b></summary>

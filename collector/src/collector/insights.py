@@ -1,6 +1,8 @@
 """Automated market-digest generation from stored series and panel docs."""
 from __future__ import annotations
 
+import hashlib
+import json
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from statistics import mean, pstdev
@@ -182,7 +184,16 @@ def build_digest(store: Store, cfg: Config, now: datetime | None = None) -> dict
         ],
         "coverage": coverage,
     }
+    digest_id = hashlib.sha256(json.dumps(
+        {
+            "alerts": [{k: row[k] for k in ("series_id", "direction", "summary")} for row in anomalies[:8]],
+            "trends": [{k: row[k] for k in ("series_id", "direction", "summary")} for row in trends[:8]],
+            "newsletter": newsletter,
+        },
+        sort_keys=True,
+    ).encode("utf-8")).hexdigest()[:16]
     return {
+        "digest_id": digest_id,
         "generated_at": now.isoformat().replace("+00:00", "Z"),
         "alerts": anomalies[:8],
         "trends": trends[:8],

@@ -162,4 +162,5 @@ def test_insights_endpoint_defaults_when_digest_missing(tmp_path):
     body = client.get("/api/insights").json()
     assert body["alerts"] == []
     assert body["trends"] == []
+    assert body["delivery"]["state"] == "disabled"
     assert body["generated_at"] is None

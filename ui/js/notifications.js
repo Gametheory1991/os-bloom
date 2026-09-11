@@ -36,7 +36,7 @@ export function initNotifications() {
 export async function notifyInsights(panel) {
   if (!panel?.generated_at || Notification.permission !== "granted" || !registrationPromise) return;
   const signature = [
-    panel.generated_at,
+    panel.digest_id ?? panel.generated_at,
     panel.alerts?.[0]?.id ?? "",
     panel.trends?.[0]?.id ?? "",
   ].join("|");

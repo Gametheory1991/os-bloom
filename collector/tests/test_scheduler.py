@@ -3,6 +3,7 @@ from pathlib import Path
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
 from collector.config import load_config
+from collector.newsletter import load_smtp_cfg
 from collector.scheduler import register_jobs
 from collector.store import Store
 
@@ -27,12 +28,12 @@ def test_register_jobs_creates_all_jobs_with_config_cadences(tmp_path):
     scheduler = AsyncIOScheduler(timezone="UTC")
     register_jobs(
         scheduler, cfg, store, get_text=fake_get, post_json=fake_post,
-        get_bytes=fake_bytes, fred_api_key="k"
+        get_bytes=fake_bytes, fred_api_key="k", smtp_cfg=load_smtp_cfg({"SMTP_PORT": "465"})
     )
     jobs = {j.id: j for j in scheduler.get_jobs()}
     assert set(jobs) == {
         "equity", "bonds", "macro", "news", "macro_history", "defi", "midnight",
-        "refs", "refs_history", "morpho", "cycle", "insights",
+        "refs", "refs_history", "morpho", "cycle", "insights", "newsletter",
     }
     assert jobs["equity"].trigger.interval.total_seconds() == 300
     assert jobs["news"].trigger.interval.total_seconds() == 600
@@ -45,6 +46,7 @@ def test_register_jobs_creates_all_jobs_with_config_cadences(tmp_path):
     assert jobs["morpho"].trigger.interval.total_seconds() == 900
     assert jobs["cycle"].trigger.interval.total_seconds() == 86400
     assert jobs["insights"].trigger.interval.total_seconds() == 1800
+    assert jobs["newsletter"].trigger.interval.total_seconds() == 1800
     assert all(j.misfire_grace_time == 30 for j in jobs.values())
 
 
@@ -55,4 +57,4 @@ def test_main_builds_app(tmp_path, monkeypatch):
 
     app, scheduler = build()
     assert app.title == "os-bloom collector"
-    assert len(scheduler.get_jobs()) == 12
+    assert len(scheduler.get_jobs()) == 13

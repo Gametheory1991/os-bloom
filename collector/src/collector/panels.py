@@ -185,19 +185,24 @@ def _doc_panel(store: Store, key: str, list_key: str) -> dict:
 
 def _insights_panel(store: Store) -> dict:
     doc = store.doc("insights")
+    status = store.doc("newsletter_status")
     if doc is None:
         return {
             "alerts": [],
             "trends": [],
             "newsletter": {"headline": "No automated digest yet", "bullets": [], "coverage": {}},
+            "delivery": status.payload if status else {"enabled": False, "state": "disabled"},
+            "digest_id": None,
             "generated_at": None,
             "updated_at": None,
             "source": None,
         }
     return {
+        "digest_id": doc.payload.get("digest_id"),
         "alerts": doc.payload.get("alerts", []),
         "trends": doc.payload.get("trends", []),
         "newsletter": doc.payload.get("newsletter", {}),
+        "delivery": status.payload if status else {"enabled": False, "state": "disabled"},
         "generated_at": doc.payload.get("generated_at"),
         "updated_at": doc.updated_at,
         "source": doc.source,
