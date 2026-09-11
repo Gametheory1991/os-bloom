@@ -22,17 +22,17 @@ def fake_io(urls):
     async def get_text(url, params=None, headers=None):
         urls.append(url)
         host = urlparse(url).netloc
-        if host.endswith("stlouisfed.org"):
+        if host == "api.stlouisfed.org":
             return FRED
         if host == "api.db.nomics.world":
             return DBNOMICS
         if host == "sdmx.oecd.org":
             return OECD
-        if host.endswith("cftc.gov"):
+        if host == "publicreporting.cftc.gov":
             return CFTC
-        if host.endswith("cboe.com"):
+        if host == "cdn.cboe.com":
             return CBOE
-        if host.endswith("yahoo.com"):
+        if host == "query1.finance.yahoo.com":
             return YAHOO
         raise AssertionError(f"unexpected url {url}")
 
@@ -63,7 +63,7 @@ async def test_fetch_cycle_dispatches_every_source(tmp_path):
     assert label == "cycle"
     for cfg in ALL_SOURCES:
         assert store.points(f"cycle:{cfg.id}") != {}, cfg.id
-    assert sum(urlparse(u).netloc.endswith("yahoo.com") for u in urls) == 2  # numerator + denominator
+    assert sum(urlparse(u).netloc == "query1.finance.yahoo.com" for u in urls) == 2
 
 
 async def test_fetch_cycle_isolates_failures(tmp_path):
