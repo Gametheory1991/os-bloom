@@ -21,6 +21,7 @@ def test_dashboard_shape_on_empty_store(tmp_path):
     body = client.get("/api/dashboard").json()
     assert set(body["panels"].keys()) == {
         "macro", "equity", "bonds", "news", "defi", "midnight", "morpho", "refs", "cycle",
+        "insights",
     }
     assert [t["id"] for t in body["panels"]["cycle"]["tabs"]] == [
         "risk", "econ", "credit", "profit", "pos",
@@ -154,3 +155,11 @@ def test_recessions_endpoint(tmp_path):
 def test_recessions_empty_store(tmp_path):
     client, _ = make_client(tmp_path)
     assert client.get("/api/recessions").json() == {"bands": []}
+
+
+def test_insights_endpoint_defaults_when_digest_missing(tmp_path):
+    client, _ = make_client(tmp_path)
+    body = client.get("/api/insights").json()
+    assert body["alerts"] == []
+    assert body["trends"] == []
+    assert body["generated_at"] is None

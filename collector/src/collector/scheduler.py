@@ -27,6 +27,7 @@ from collector.fetchers.refs import fetch_refs
 from collector.fetchers.refs_history import fetch_refs_history
 from collector.fetchers.zyfai import fetch_defi
 from collector.http import GetBytes, GetText, PostJson
+from collector.insights import refresh_digest
 from collector.runner import run_fetcher
 from collector.store import Store
 
@@ -66,6 +67,8 @@ def register_jobs(
                    partial(fetch_morpho, cfg.defi, store, post_json)),
         "cycle": (cfg.cadences["cycle"],
                   partial(fetch_cycle, cfg.cycle_series, store, fred_api_key, get_text, get_bytes)),
+        "insights": (cfg.cadences["insights"],
+                     partial(refresh_digest, store, cfg)),
     }
     for name, (seconds, fn) in fetchers.items():
         scheduler.add_job(

@@ -183,6 +183,27 @@ def _doc_panel(store: Store, key: str, list_key: str) -> dict:
     return {list_key: doc.payload[list_key], "updated_at": doc.updated_at, "source": doc.source}
 
 
+def _insights_panel(store: Store) -> dict:
+    doc = store.doc("insights")
+    if doc is None:
+        return {
+            "alerts": [],
+            "trends": [],
+            "newsletter": {"headline": "No automated digest yet", "bullets": [], "coverage": {}},
+            "generated_at": None,
+            "updated_at": None,
+            "source": None,
+        }
+    return {
+        "alerts": doc.payload.get("alerts", []),
+        "trends": doc.payload.get("trends", []),
+        "newsletter": doc.payload.get("newsletter", {}),
+        "generated_at": doc.payload.get("generated_at"),
+        "updated_at": doc.updated_at,
+        "source": doc.source,
+    }
+
+
 def build_dashboard(
     store: Store,
     indexes: list[IndexCfg],
@@ -207,5 +228,6 @@ def build_dashboard(
             "morpho": _doc_panel(store, "morpho_markets", "rows"),
             "refs": _refs_panel(store),
             "cycle": _cycle_panel(store, list(cycle_series), list(cycle_tabs)),
+            "insights": _insights_panel(store),
         },
     }

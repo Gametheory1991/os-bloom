@@ -8,5 +8,6 @@ async function getJson(path) {
 }
 
 export const getDashboard = () => getJson("/api/dashboard");
+export const getInsights = () => getJson("/api/insights");
 export const getSeries = (id, range = "10y") => getJson(`/api/series/${encodeURIComponent(id)}?range=${range}`);
 export const getRecessions = () => getJson("/api/recessions");

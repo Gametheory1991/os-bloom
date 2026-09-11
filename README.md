@@ -18,7 +18,7 @@ live upstreams, awkward data, and decisions that have to be defended.
 
 [![License](https://img.shields.io/badge/license-MIT-f5a623?style=flat-square)](LICENSE)
 ![Python](https://img.shields.io/badge/python-3.12+-5f9ea0?style=flat-square)
-![Tests](https://img.shields.io/badge/tests-188%20passing-4c9a2a?style=flat-square)
+![Tests](https://img.shields.io/badge/tests-189%20passing-4c9a2a?style=flat-square)
 ![Paid data sources](https://img.shields.io/badge/paid%20data%20sources-0-f5a623?style=flat-square)
 ![Built AI-first](https://img.shields.io/badge/built-AI--first-8a63d2?style=flat-square)
 
@@ -32,6 +32,13 @@ It collects ~60 series on a schedule into a local SQLite file and serves them
 as a dense, keyboard-driven terminal UI: macro calendar, world equity indexes,
 government bond yields and policy rates, headlines, DeFi yields, and a
 five-tab market-cycle chart pack.
+
+This fork also generates an automated digest from the collected data:
+
+- anomaly alerts based on unusually large moves versus recent history
+- cross-series trend summaries using rolling 1M moves
+- a newsletter-style panel/API payload covering macro, news, DeFi, and rates
+- installable mobile/PWA support with browser notifications for fresh digests
 
 ## Tabs
 
@@ -80,7 +87,7 @@ UI_PORT=9090 docker compose up --build
 ```
 
 `GET /healthz` reports, per fetcher, its last run, the source actually used,
-and any error.
+and any error. `GET /api/insights` returns the current automated digest.
 
 <details>
 <summary><b>Running without Docker</b></summary>
@@ -124,7 +131,7 @@ keyless.
 ## Development
 
 ```bash
-make test
+make test    # 189 passing, 1 skipped
 make run
 make smoke
 ```

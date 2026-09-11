@@ -145,6 +145,7 @@ def test_build_dashboard_full_shape(tmp_path):
     assert borrow["id"] == "aave-base-usdc-borrow"
     assert borrow["chg_1d_bp"] is None      # no history yet for this ref
     assert borrow["chg_1w_bp"] is None
+    assert dash["panels"]["insights"]["alerts"] == []
 
 
 def test_build_dashboard_empty_store(tmp_path):
@@ -158,6 +159,7 @@ def test_build_dashboard_empty_store(tmp_path):
     assert dash["panels"]["midnight"]["rows"] == []
     assert dash["panels"]["morpho"]["rows"] == []
     assert dash["panels"]["refs"] == {"rows": [], "updated_at": None, "source": None}
+    assert dash["panels"]["insights"]["newsletter"]["headline"] == "No automated digest yet"
 
 
 def test_malformed_equity_quote_skipped_not_500(tmp_path):

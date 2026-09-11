@@ -3,7 +3,9 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0a0e0a">
   <title>os-bloom</title>
+  <link rel="manifest" href="manifest.webmanifest">
   <link rel="stylesheet" href="vendor/uplot/uPlot.min.css">
   <link rel="stylesheet" href="css/terminal.css">
 </head>
@@ -12,6 +14,7 @@
     <span class="brand">OS-BLOOM</span>
     <span id="clock" class="muted"></span>
     <span id="banner" class="banner hidden"></span>
+    <button id="alerts-toggle" class="header-btn" type="button">ENABLE ALERTS</button>
   </header>
   <nav class="tab-row">
     <a href="#/mkt" data-tab-link="mkt">MKT</a>
@@ -40,10 +43,17 @@
       <div class="panel-body"></div>
       <div class="panel-foot muted"></div>
     </section>
-    <section class="panel" id="panel-news">
-      <div class="panel-title">TOP NEWS</div>
-      <div class="panel-body"></div>
-      <div class="panel-foot muted"></div>
+    <section class="col-right">
+      <div class="panel" id="panel-insights">
+        <div class="panel-title">ALERTS / NEWSLETTER</div>
+        <div class="panel-body"></div>
+        <div class="panel-foot muted"></div>
+      </div>
+      <div class="panel" id="panel-news">
+        <div class="panel-title">TOP NEWS</div>
+        <div class="panel-body"></div>
+        <div class="panel-foot muted"></div>
+      </div>
     </section>
   </main>
   <main class="grid grid-defi hidden" data-tab="defi">

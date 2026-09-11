@@ -13,6 +13,7 @@ cadences:          # seconds between fetcher runs
   refs_history: 86400
   morpho: 900
   cycle: 86400   # daily; weekly sources just re-upsert (idempotent)
+  insights: 1800
 
 indexes:           # all served by yahoo
   - { symbol: SPX,  name: "S&P 500",       yahoo: "^GSPC" }

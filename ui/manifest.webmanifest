@@ -1,0 +1,16 @@
+{
+  "name": "os-bloom",
+  "short_name": "os-bloom",
+  "start_url": "/#/mkt",
+  "display": "standalone",
+  "background_color": "#0a0e0a",
+  "theme_color": "#0a0e0a",
+  "icons": [
+    {
+      "src": "/icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

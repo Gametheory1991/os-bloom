@@ -10,11 +10,16 @@ body {
 }
 header {
   display: flex; gap: 16px; align-items: baseline;
-  padding: 8px 14px; border-bottom: 1px solid var(--line);
+  flex-wrap: wrap; padding: 8px 14px; border-bottom: 1px solid var(--line);
 }
 .brand { color: var(--amber); letter-spacing: 3px; font-weight: 700; }
 .muted { color: var(--muted); font-size: 11px; }
 .banner { color: #0a0e0a; background: var(--amber); padding: 1px 8px; margin-left: auto; }
+.header-btn {
+  margin-left: auto; background: transparent; color: var(--amber); border: 1px solid var(--line);
+  padding: 4px 8px; font: inherit; cursor: pointer;
+}
+.header-btn:disabled { color: var(--muted); cursor: default; }
 .hidden { display: none !important; }
 
 .grid {
@@ -31,7 +36,7 @@ header {
   padding: 6px 10px; border-bottom: 1px solid var(--line);
   display: flex; justify-content: space-between; align-items: baseline;
 }
-.panel-body { flex: 1; overflow-y: auto; padding: 4px 10px; }
+.panel-body { flex: 1; overflow: auto; padding: 4px 10px; }
 .panel-foot { padding: 4px 10px; border-top: 1px solid var(--line); font-size: 10px; }
 .panel-foot.stale { color: var(--amber); }
 
@@ -101,6 +106,13 @@ tr.macro-divider td { color: var(--amber); letter-spacing: 2px; font-size: 10px;
 .defi-link:hover { color: var(--amber); text-decoration: underline; }
 #midnight-curve { margin-top: 8px; }
 .empty-state { color: var(--muted); padding: 8px 0; }
+.insight-block + .insight-block { margin-top: 10px; }
+.insight-title, .newsletter-headline { color: var(--amber); margin-bottom: 6px; }
+.insight-item { border-top: 1px dotted var(--line); padding: 6px 0; }
+.insight-name { font-weight: 700; }
+.insight-summary, .newsletter-list { color: var(--fg); }
+.newsletter-list { padding-left: 18px; }
+.newsletter-list li + li { margin-top: 4px; }
 
 .view-toggle a { color: var(--muted); cursor: pointer; letter-spacing: 1px; padding: 0 6px; }
 .view-toggle a.active { color: var(--bg); background: var(--amber); }
@@ -108,4 +120,16 @@ tr.macro-divider td { color: var(--amber); letter-spacing: 2px; font-size: 10px;
 @media (max-width: 1000px) {
   .grid { grid-template-columns: 1fr; grid-auto-rows: minmax(240px, auto); overflow-y: auto; }
   body { height: auto; }
+  .tab-row { overflow-x: auto; scrollbar-width: thin; }
+  .tab-row a { white-space: nowrap; }
+  .header-btn, .banner { margin-left: 0; }
+}
+
+@media (max-width: 680px) {
+  body { font-size: 12px; }
+  header { gap: 8px; align-items: center; }
+  .grid, .col-left, .col-right { gap: 6px; }
+  .panel-title { padding: 8px 10px; }
+  td, th { padding: 4px 3px; font-size: 11px; }
+  .overlay-box { width: min(96vw, 860px); padding: 10px; }
 }

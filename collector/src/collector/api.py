@@ -83,6 +83,16 @@ def create_app(store: Store, cfg: Config) -> FastAPI:
         bands = to_bands(store.points("cycle:usrec"))
         return {"bands": [[a.isoformat(), b.isoformat()] for a, b in bands]}
 
+    @app.get("/api/insights")
+    def insights() -> dict:
+        return build_dashboard(
+            store,
+            cfg.indexes,
+            now=datetime.now(timezone.utc),
+            cycle_series=cfg.cycle_series,
+            cycle_tabs=cfg.cycle_tabs,
+        )["panels"]["insights"]
+
     @app.get("/healthz")
     def healthz() -> dict:
         fetchers = store.statuses()
