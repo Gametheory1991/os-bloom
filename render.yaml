@@ -1,0 +1,38 @@
+services:
+  - type: web
+    name: os-bloom
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    plan: free
+    autoDeploy: true
+    envVars:
+      - key: CONFIG_PATH
+        value: /app/config.yaml
+      - key: DB_PATH
+        value: /tmp/bloom.db
+      - key: SERVE_UI
+        value: "1"
+      - key: UI_PATH
+        value: /app/ui
+      - key: FRED_API_KEY
+        sync: false
+      - key: DASHBOARD_URL
+        sync: false
+      - key: SMTP_ENABLED
+        value: "0"
+      - key: SMTP_HOST
+        value: smtp.gmail.com
+      - key: SMTP_PORT
+        value: "465"
+      - key: SMTP_USE_SSL
+        value: "1"
+      - key: SMTP_STARTTLS
+        value: "0"
+      - key: SMTP_USERNAME
+        sync: false
+      - key: SMTP_PASSWORD
+        sync: false
+      - key: SMTP_FROM
+        sync: false
+      - key: SMTP_TO
+        sync: false

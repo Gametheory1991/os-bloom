@@ -18,7 +18,7 @@ live upstreams, awkward data, and decisions that have to be defended.
 
 [![License](https://img.shields.io/badge/license-MIT-f5a623?style=flat-square)](LICENSE)
 ![Python](https://img.shields.io/badge/python-3.12+-5f9ea0?style=flat-square)
-![Tests](https://img.shields.io/badge/tests-189%20passing-4c9a2a?style=flat-square)
+![Tests](https://img.shields.io/badge/tests-194%20passing-4c9a2a?style=flat-square)
 ![Paid data sources](https://img.shields.io/badge/paid%20data%20sources-0-f5a623?style=flat-square)
 ![Built AI-first](https://img.shields.io/badge/built-AI--first-8a63d2?style=flat-square)
 
@@ -89,6 +89,12 @@ hostname -I
 Then open `http://<that-ip>:8080` on your phone. If you want the digest email
 to include a clickable mobile-safe link, set `DASHBOARD_URL` in `.env`.
 
+Exact local mobile URL formats:
+
+- dashboard home: `http://<your-lan-ip>:8080/`
+- market tab: `http://<your-lan-ip>:8080/#/mkt`
+- DeFi tab: `http://<your-lan-ip>:8080/#/defi`
+
 Port 8080 already taken? Set `UI_PORT`:
 
 ```bash
@@ -119,6 +125,27 @@ DASHBOARD_URL=http://<your-lan-ip>:8080
 
 The collector sends the digest over SMTP after a fresh `insights` digest is
 generated and avoids duplicate sends for the same digest content.
+
+### Deploy on Render
+
+This repository now includes a root `Dockerfile` and `render.yaml` for a
+single Render web service that serves both the API and UI from one container.
+
+1. Open <https://dashboard.render.com>.
+2. Create a new **Web Service** from this repository.
+3. Render will read `render.yaml` and use the bundled root `Dockerfile`.
+4. Set `FRED_API_KEY` before the first deploy.
+5. Optionally set `DASHBOARD_URL=https://<your-service-name>.onrender.com`.
+6. Optionally set the SMTP variables if you want Gmail delivery in production.
+
+Exact hosted mobile URL formats on Render:
+
+- dashboard home: `https://<your-service-name>.onrender.com/`
+- market tab: `https://<your-service-name>.onrender.com/#/mkt`
+- DeFi tab: `https://<your-service-name>.onrender.com/#/defi`
+
+Note: the Free Render plan uses ephemeral disk, so `/tmp/bloom.db` will reset
+when the service restarts or redeploys.
 
 <details>
 <summary><b>Running without Docker</b></summary>
@@ -162,7 +189,7 @@ keyless.
 ## Development
 
 ```bash
-make test    # 189 passing, 1 skipped
+make test    # 194 passing, 1 skipped
 make run
 make smoke
 ```
