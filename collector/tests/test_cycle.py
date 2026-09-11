@@ -1,5 +1,6 @@
 from datetime import date
 from pathlib import Path
+from urllib.parse import urlparse
 
 import pytest
 
@@ -20,17 +21,18 @@ AAII = (FIX / "aaii_sentiment.xls").read_bytes()
 def fake_io(urls):
     async def get_text(url, params=None, headers=None):
         urls.append(url)
-        if "stlouisfed" in url:
+        host = urlparse(url).netloc
+        if host.endswith("stlouisfed.org"):
             return FRED
-        if "db.nomics" in url:
+        if host == "api.db.nomics.world":
             return DBNOMICS
-        if "sdmx.oecd" in url:
+        if host == "sdmx.oecd.org":
             return OECD
-        if "cftc.gov" in url:
+        if host.endswith("cftc.gov"):
             return CFTC
-        if "cboe.com" in url:
+        if host.endswith("cboe.com"):
             return CBOE
-        if "yahoo.com" in url:
+        if host.endswith("yahoo.com"):
             return YAHOO
         raise AssertionError(f"unexpected url {url}")
 
@@ -61,7 +63,7 @@ async def test_fetch_cycle_dispatches_every_source(tmp_path):
     assert label == "cycle"
     for cfg in ALL_SOURCES:
         assert store.points(f"cycle:{cfg.id}") != {}, cfg.id
-    assert sum("yahoo.com" in u for u in urls) == 2  # numerator + denominator
+    assert sum(urlparse(u).netloc.endswith("yahoo.com") for u in urls) == 2  # numerator + denominator
 
 
 async def test_fetch_cycle_isolates_failures(tmp_path):

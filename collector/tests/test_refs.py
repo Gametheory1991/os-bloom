@@ -1,6 +1,7 @@
 import json
 from datetime import datetime, timezone
 from pathlib import Path
+from urllib.parse import urlparse
 
 import pytest
 
@@ -58,7 +59,7 @@ async def fake_get(url, params=None, headers=None):
 
 
 async def fake_post(url, json=None, headers=None):
-    if "mainnet.base.org" in url:
+    if urlparse(url).netloc == "mainnet.base.org":
         return AAVE_RPC
     raise RuntimeError(f"unexpected url: {url}")
 
@@ -147,7 +148,7 @@ async def test_fetch_refs_multiple_aave_markets_with_per_market_degradation(tmp_
                    pendle=REFS.pendle, funding=REFS.funding)
 
     async def eth_rpc_fails(url, json=None, headers=None):
-        if "mainnet.base.org" in url:
+        if urlparse(url).netloc == "mainnet.base.org":
             return AAVE_RPC
         raise RuntimeError("publicnode down")
 

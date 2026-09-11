@@ -1,5 +1,6 @@
 from datetime import date
 from pathlib import Path
+from urllib.parse import urlparse
 
 from collector.config import IndexCfg
 from collector.fetchers.equity import fetch_equity
@@ -80,7 +81,7 @@ async def test_yahoo_hits_the_expected_endpoint(tmp_path):
     store = Store(tmp_path / "t.db")
 
     async def get_yahoo(url, params=None, headers=None):
-        assert "query1.finance.yahoo.com" in url
+        assert urlparse(url).netloc == "query1.finance.yahoo.com"
         # no per-fetcher UA override: http.get_text applies the honest default
         assert headers is None
         return YAHOO_SPX
