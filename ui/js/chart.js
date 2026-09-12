@@ -95,6 +95,7 @@ export async function openChart(seriesId, title, overlayId = null) {
 }
 
 document.getElementById("chart-close").addEventListener("click", () => {
+  activeRequestId += 1;
   document.getElementById("chart-overlay").classList.add("hidden");
   destroyPlot();
 });
