@@ -123,6 +123,7 @@ tr.macro-divider td { color: var(--amber); letter-spacing: 2px; font-size: 10px;
   border: none;
   font: inherit;
 }
+.view-toggle button:focus-visible { outline: 1px solid var(--amber); outline-offset: 1px; }
 .view-toggle button.active { color: var(--bg); background: var(--amber); }
 
 @media (max-width: 1000px) {
