@@ -37,6 +37,14 @@ def test_load_smtp_cfg_reads_expected_env():
     assert cfg.secret == "app-secret"
 
 
+def test_load_smtp_cfg_falls_back_to_render_external_url():
+    cfg = load_smtp_cfg({
+        "SMTP_PORT": "465",
+        "RENDER_EXTERNAL_URL": "https://os-bloom.onrender.com",
+    })
+    assert cfg.dashboard_url == "https://os-bloom.onrender.com"
+
+
 @pytest.mark.asyncio
 async def test_deliver_newsletter_sends_once_per_digest(tmp_path, monkeypatch):
     store = Store(tmp_path / "t.db")

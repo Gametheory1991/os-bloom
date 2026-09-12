@@ -31,6 +31,10 @@ def load_smtp_cfg(env: dict[str, str] | None = None) -> SmtpCfg:
     username = env.get("SMTP_USERNAME", "").strip()
     sender = env.get("SMTP_FROM", "").strip() or username
     secret = env.get(secret_key, "").strip()
+    dashboard_url = (
+        env.get("DASHBOARD_URL", "").strip()
+        or env.get("RENDER_EXTERNAL_URL", "").strip()
+    )
     return SmtpCfg(
         env.get("SMTP_ENABLED", "0").strip() == "1",
         env.get("SMTP_HOST", "smtp.gmail.com").strip(),
@@ -41,7 +45,7 @@ def load_smtp_cfg(env: dict[str, str] | None = None) -> SmtpCfg:
         env.get("SMTP_TO", "").strip(),
         env.get("SMTP_USE_SSL", "1").strip() == "1",
         env.get("SMTP_STARTTLS", "0").strip() == "1",
-        env.get("DASHBOARD_URL", "").strip(),
+        dashboard_url,
     )
 
 

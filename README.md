@@ -18,7 +18,7 @@ live upstreams, awkward data, and decisions that have to be defended.
 
 [![License](https://img.shields.io/badge/license-MIT-f5a623?style=flat-square)](LICENSE)
 ![Python](https://img.shields.io/badge/python-3.12+-5f9ea0?style=flat-square)
-![Tests](https://img.shields.io/badge/tests-194%20passing-4c9a2a?style=flat-square)
+![Tests](https://img.shields.io/badge/tests-195%20passing-4c9a2a?style=flat-square)
 ![Paid data sources](https://img.shields.io/badge/paid%20data%20sources-0-f5a623?style=flat-square)
 ![Built AI-first](https://img.shields.io/badge/built-AI--first-8a63d2?style=flat-square)
 
@@ -135,8 +135,12 @@ single Render web service that serves both the API and UI from one container.
 2. Create a new **Web Service** from this repository.
 3. Render will read `render.yaml` and use the bundled root `Dockerfile`.
 4. Set `FRED_API_KEY` before the first deploy.
-5. Optionally set `DASHBOARD_URL=https://<your-service-name>.onrender.com`.
-6. Optionally set the SMTP variables if you want Gmail delivery in production.
+5. Render health-checks `GET /healthz` automatically.
+6. `RENDER_EXTERNAL_URL` is available automatically on Render, so newsletter links
+   can work even if you do not set `DASHBOARD_URL`.
+7. Optionally set `DASHBOARD_URL=https://<your-service-name>.onrender.com` if you
+   prefer to override the default Render URL.
+8. Optionally set the SMTP variables if you want Gmail delivery in production.
 
 Exact hosted mobile URL formats on Render:
 
@@ -189,7 +193,7 @@ keyless.
 ## Development
 
 ```bash
-make test    # 194 passing, 1 skipped
+make test    # 195 passing, 1 skipped
 make run
 make smoke
 ```
