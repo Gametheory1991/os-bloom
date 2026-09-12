@@ -1,7 +1,13 @@
 import { openChart } from "../chart.js";
 
-const day = (iso) => new Date(iso).toLocaleDateString("en-GB", { weekday: "short" });
-const hm = (iso) => new Date(iso).toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" });
+const esc = (s) => String(s).replace(/[&<>"']/g, (c) =>
+  ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+function when(iso) {
+  if (!Number.isFinite(Date.parse(iso))) return "TBD";
+  const d = new Date(iso);
+  return `${d.toLocaleDateString("en-GB", { weekday: "short" })} ${d.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" })}`;
+}
 
 // Timeline: released events from the last 7 days first (actuals filled),
 // then the ── UPCOMING ── divider, then the rest of the FF week.
@@ -11,10 +17,10 @@ export function renderMacro(panel) {
   const all = [...past, ...panel.releases];
   const row = (r, i) =>
     `<tr class="release ${r.series_id ? "clickable" : ""}" data-i="${i}">` +
-    `<td>${day(r.time)} ${hm(r.time)}</td><td>${r.country}</td>` +
-    `<td style="text-align:left">${r.name}</td>` +
-    `<td>${r.previous ?? "—"}</td><td>${r.consensus ?? "—"}</td>` +
-    `<td class="actual">${r.actual ?? "—"}</td></tr>`;
+    `<td>${esc(when(r.time))}</td><td>${esc(r.country ?? "—")}</td>` +
+    `<td style="text-align:left">${esc(r.name ?? "—")}</td>` +
+    `<td>${esc(r.previous ?? "—")}</td><td>${esc(r.consensus ?? "—")}</td>` +
+    `<td class="actual">${esc(r.actual ?? "—")}</td></tr>`;
   body.innerHTML = `<table>
     <tr><th>When (local)</th><th>Ctry</th><th>Release</th><th>Prev</th><th>Cons</th><th>Act</th></tr>
     ${past.map(row).join("")}

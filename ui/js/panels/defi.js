@@ -32,12 +32,12 @@ let defiView = "vaults"; // "vaults" | "markets" — in-memory, default VAULTS (
 const VIEW_TITLES = { vaults: "CURATED VAULTS — USDC", markets: "MORPHO MARKETS — USDC" };
 
 export function initDefiViewToggle(onChange) {
-  document.querySelectorAll("#panel-defi .view-toggle a").forEach((a) => {
-    a.addEventListener("click", () => {
-      if (a.dataset.view === defiView) return;
-      document.querySelectorAll("#panel-defi .view-toggle a").forEach((x) =>
-        x.classList.toggle("active", x === a));
-      defiView = a.dataset.view;
+  document.querySelectorAll("#panel-defi .view-toggle button").forEach((button) => {
+    button.addEventListener("click", () => {
+      if (button.dataset.view === defiView) return;
+      document.querySelectorAll("#panel-defi .view-toggle button").forEach((x) =>
+        x.classList.toggle("active", x === button));
+      defiView = button.dataset.view;
       onChange();
     });
   });

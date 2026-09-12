@@ -114,8 +114,16 @@ tr.macro-divider td { color: var(--amber); letter-spacing: 2px; font-size: 10px;
 .newsletter-list { padding-left: 18px; }
 .newsletter-list li + li { margin-top: 4px; }
 
-.view-toggle a { color: var(--muted); cursor: pointer; letter-spacing: 1px; padding: 0 6px; }
-.view-toggle a.active { color: var(--bg); background: var(--amber); }
+.view-toggle button {
+  color: var(--muted);
+  cursor: pointer;
+  letter-spacing: 1px;
+  padding: 0 6px;
+  background: transparent;
+  border: none;
+  font: inherit;
+}
+.view-toggle button.active { color: var(--bg); background: var(--amber); }
 
 @media (max-width: 1000px) {
   .grid { grid-template-columns: 1fr; grid-auto-rows: minmax(240px, auto); overflow-y: auto; }

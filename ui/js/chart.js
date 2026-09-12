@@ -2,6 +2,7 @@ import { getRecessions, getSeries } from "./api.js";
 
 let plot = null;
 let recessionsPromise = null; // fetched once per page load, shared by all charts
+let activeRequestId = 0;
 
 function destroyPlot() {
   if (plot) {
@@ -49,6 +50,7 @@ function bandsHook(bands) {
 }
 
 export async function openChart(seriesId, title, overlayId = null) {
+  const requestId = ++activeRequestId;
   const overlay = document.getElementById("chart-overlay");
   const root = document.getElementById("chart-root");
   document.getElementById("chart-title").textContent = title;
@@ -59,6 +61,7 @@ export async function openChart(seriesId, title, overlayId = null) {
       overlayId ? getSeries(overlayId, "10y") : null,
       loadRecessions(),
     ]);
+    if (requestId !== activeRequestId) return;
     root.innerHTML = "";
     destroyPlot();
     const axisStyle = { stroke: "#6a746a", grid: { stroke: "#1e261e" } };
@@ -84,6 +87,7 @@ export async function openChart(seriesId, title, overlayId = null) {
     }
     plot = new uPlot(opts, data, root);
   } catch (err) {
+    if (requestId !== activeRequestId) return;
     // a failed fetch must not leave the previous chart silently mislabeled
     destroyPlot();
     root.textContent = `Failed to load chart — ${err.message}`;
