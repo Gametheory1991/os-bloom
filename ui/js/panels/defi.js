@@ -32,11 +32,16 @@ let defiView = "vaults"; // "vaults" | "markets" — in-memory, default VAULTS (
 const VIEW_TITLES = { vaults: "CURATED VAULTS — USDC", markets: "MORPHO MARKETS — USDC" };
 
 export function initDefiViewToggle(onChange) {
-  document.querySelectorAll("#panel-defi .view-toggle button").forEach((button) => {
+  const buttons = document.querySelectorAll("#panel-defi .view-toggle button");
+  buttons.forEach((button) => {
+    button.setAttribute("aria-pressed", String(button.dataset.view === defiView));
     button.addEventListener("click", () => {
       if (button.dataset.view === defiView) return;
-      document.querySelectorAll("#panel-defi .view-toggle button").forEach((x) =>
-        x.classList.toggle("active", x === button));
+      buttons.forEach((x) => {
+        const active = x === button;
+        x.classList.toggle("active", active);
+        x.setAttribute("aria-pressed", String(active));
+      });
       defiView = button.dataset.view;
       onChange();
     });
