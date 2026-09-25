@@ -17,6 +17,7 @@ def _normalize_row(row: dict) -> dict | None:
         "symbol": symbol,
         "name": name,
         "url": url,
+        "search": f"{symbol} {name}".lower(),
         "one_week_return": row.get("one_week_return"),
         "one_year_return": row.get("one_year_return"),
         "three_year_return": row.get("three_year_return"),

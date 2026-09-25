@@ -41,6 +41,24 @@ def create_app(store: Store, cfg: Config) -> FastAPI:
     for f in cfg.refs.funding:
         ref_labels[f.id] = f.label
 
+    def _etf_index(doc) -> dict[str, dict]:
+        if doc is None:
+            return {}
+        by_symbol = doc.payload.get("by_symbol", {})
+        if isinstance(by_symbol, dict) and by_symbol:
+            return {str(k).strip().upper(): v for k, v in by_symbol.items() if isinstance(v, dict)}
+        rows = doc.payload.get("rows", [])
+        if not isinstance(rows, list):
+            return {}
+        return {
+            str(r.get("symbol", "")).strip().upper(): r
+            for r in rows
+            if isinstance(r, dict) and str(r.get("symbol", "")).strip()
+        }
+
+    def _public_etf_row(row: dict) -> dict:
+        return {k: v for k, v in row.items() if k != "search"}
+
     @app.get("/api/dashboard")
     def dashboard() -> dict:
         return build_dashboard(store, cfg.indexes, now=datetime.now(timezone.utc),
@@ -103,16 +121,22 @@ def create_app(store: Store, cfg: Config) -> FastAPI:
             raise HTTPException(status_code=400, detail="limit must be >= 0")
         query = (q or "").strip().lower()
         if query:
-            rows = [
-                r for r in all_rows
-                if query in str(r.get("symbol", "")).lower() or query in str(r.get("name", "")).lower()
-            ]
+            rows = []
+            for r in all_rows:
+                if not isinstance(r, dict):
+                    continue
+                blob = str(r.get("search", "")).lower()
+                if not blob:
+                    blob = f"{str(r.get('symbol', '')).lower()} {str(r.get('name', '')).lower()}".strip()
+                if query in blob:
+                    rows.append(r)
             total = len(rows)
             if limit is not None:
                 rows = rows[:limit]
         else:
             total = len(all_rows)
             rows = all_rows if limit is None else all_rows[:limit]
+        rows = [_public_etf_row(r) for r in rows if isinstance(r, dict)]
         return {
             "rows": rows,
             "count": total,
@@ -125,18 +149,9 @@ def create_app(store: Store, cfg: Config) -> FastAPI:
     def etf_by_symbol(symbol: str) -> dict:
         doc = store.doc("etf_catalog")
         wanted = symbol.strip().upper()
-        if doc:
-            by_symbol = doc.payload.get("by_symbol", {})
-            if isinstance(by_symbol, dict):
-                row = by_symbol.get(wanted)
-                if isinstance(row, dict):
-                    return row
-            rows = doc.payload.get("rows", [])
-            for row in rows if isinstance(rows, list) else []:
-                if not isinstance(row, dict):
-                    continue
-                if str(row.get("symbol", "")).strip().upper() == wanted:
-                    return row
+        row = _etf_index(doc).get(wanted)
+        if row is not None:
+            return _public_etf_row(row)
         raise HTTPException(status_code=404, detail=f"unknown etf: {wanted}")
 
     @app.get("/healthz")
