@@ -184,6 +184,7 @@ def test_etfs_endpoints(tmp_path):
     assert filtered["count"] == 1
     assert filtered["returned_count"] == 1
     assert filtered["rows"][0]["symbol"] == "IVV"
+    assert client.get("/api/etfs?limit=0").status_code == 400
     assert client.get("/api/etfs?limit=-1").status_code == 400
     one = client.get("/api/etfs/SPY").json()
     assert one["name"] == "SPDR S&P 500 ETF Trust"

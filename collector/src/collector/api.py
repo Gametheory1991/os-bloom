@@ -117,8 +117,8 @@ def create_app(store: Store, cfg: Config) -> FastAPI:
         all_rows = doc.payload.get("rows", []) if doc else []
         if not isinstance(all_rows, list):
             all_rows = []
-        if limit is not None and limit < 0:
-            raise HTTPException(status_code=400, detail="limit must be >= 0")
+        if limit is not None and limit <= 0:
+            raise HTTPException(status_code=400, detail="limit must be > 0")
         query = (q or "").strip().lower()
         if query:
             rows = []
