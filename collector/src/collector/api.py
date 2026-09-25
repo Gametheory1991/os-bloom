@@ -93,6 +93,35 @@ def create_app(store: Store, cfg: Config) -> FastAPI:
             cycle_tabs=cfg.cycle_tabs,
         )["panels"]["insights"]
 
+    @app.get("/api/etfs")
+    def etfs(limit: int | None = None, q: str | None = None) -> dict:
+        doc = store.doc("etf_catalog")
+        rows = list(doc.payload.get("rows", [])) if doc else []
+        query = (q or "").strip().lower()
+        if query:
+            rows = [
+                r for r in rows
+                if query in str(r.get("symbol", "")).lower() or query in str(r.get("name", "")).lower()
+            ]
+        if limit is not None and limit >= 0:
+            rows = rows[:limit]
+        return {
+            "rows": rows,
+            "count": len(rows),
+            "updated_at": doc.updated_at if doc else None,
+            "source": doc.source if doc else None,
+        }
+
+    @app.get("/api/etfs/{symbol}")
+    def etf_by_symbol(symbol: str) -> dict:
+        doc = store.doc("etf_catalog")
+        rows = doc.payload.get("rows", []) if doc else []
+        wanted = symbol.strip().upper()
+        for row in rows:
+            if str(row.get("symbol", "")).upper() == wanted:
+                return row
+        raise HTTPException(status_code=404, detail=f"unknown etf: {wanted}")
+
     @app.get("/healthz")
     def healthz() -> dict:
         fetchers = store.statuses()
