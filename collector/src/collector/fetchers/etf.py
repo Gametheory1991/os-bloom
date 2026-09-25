@@ -43,5 +43,10 @@ async def fetch_etf_catalog(catalog_url: str, store: Store, get_text: GetText) -
     if not rows:
         raise RuntimeError("ETF catalog payload had no valid rows")
     rows.sort(key=lambda r: r["symbol"])
-    store.put_doc("etf_catalog", {"rows": rows, "count": len(rows)}, source="etfdb")
+    by_symbol = {r["symbol"]: r for r in rows}
+    store.put_doc(
+        "etf_catalog",
+        {"rows": rows, "by_symbol": by_symbol, "count": len(rows)},
+        source="etfdb",
+    )
     return "etfdb"

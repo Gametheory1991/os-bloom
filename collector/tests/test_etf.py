@@ -26,6 +26,7 @@ async def test_fetch_etf_catalog_normalizes_dedupes_and_stores(tmp_path):
     assert doc.source == "etfdb"
     assert doc.payload["count"] == 2
     assert [r["symbol"] for r in doc.payload["rows"]] == ["IVV", "SPY"]
+    assert doc.payload["by_symbol"]["SPY"]["name"] == "SPDR S&P 500 ETF Trust"
 
 
 @pytest.mark.asyncio

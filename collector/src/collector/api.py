@@ -96,18 +96,23 @@ def create_app(store: Store, cfg: Config) -> FastAPI:
     @app.get("/api/etfs")
     def etfs(limit: int | None = None, q: str | None = None) -> dict:
         doc = store.doc("etf_catalog")
-        rows = list(doc.payload.get("rows", [])) if doc else []
+        all_rows = doc.payload.get("rows", []) if doc else []
+        if not isinstance(all_rows, list):
+            all_rows = []
         if limit is not None and limit < 0:
             raise HTTPException(status_code=400, detail="limit must be >= 0")
         query = (q or "").strip().lower()
         if query:
             rows = [
-                r for r in rows
+                r for r in all_rows
                 if query in str(r.get("symbol", "")).lower() or query in str(r.get("name", "")).lower()
             ]
-        total = len(rows)
-        if limit is not None and limit >= 0:
-            rows = rows[:limit]
+            total = len(rows)
+            if limit is not None:
+                rows = rows[:limit]
+        else:
+            total = len(all_rows)
+            rows = all_rows if limit is None else all_rows[:limit]
         return {
             "rows": rows,
             "count": total,
@@ -119,11 +124,17 @@ def create_app(store: Store, cfg: Config) -> FastAPI:
     @app.get("/api/etfs/{symbol}")
     def etf_by_symbol(symbol: str) -> dict:
         doc = store.doc("etf_catalog")
-        rows = doc.payload.get("rows", []) if doc else []
         wanted = symbol.strip().upper()
-        for row in rows:
-            if str(row.get("symbol", "")).upper() == wanted:
-                return row
+        if doc:
+            by_symbol = doc.payload.get("by_symbol", {})
+            if isinstance(by_symbol, dict):
+                row = by_symbol.get(wanted)
+                if isinstance(row, dict):
+                    return row
+            rows = doc.payload.get("rows", [])
+            for row in rows if isinstance(rows, list) else []:
+                if str(row.get("symbol", "")).strip().upper() == wanted:
+                    return row
         raise HTTPException(status_code=404, detail=f"unknown etf: {wanted}")
 
     @app.get("/healthz")
