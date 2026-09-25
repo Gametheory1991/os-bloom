@@ -133,6 +133,8 @@ def create_app(store: Store, cfg: Config) -> FastAPI:
                     return row
             rows = doc.payload.get("rows", [])
             for row in rows if isinstance(rows, list) else []:
+                if not isinstance(row, dict):
+                    continue
                 if str(row.get("symbol", "")).strip().upper() == wanted:
                     return row
         raise HTTPException(status_code=404, detail=f"unknown etf: {wanted}")
