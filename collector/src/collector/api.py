@@ -97,6 +97,8 @@ def create_app(store: Store, cfg: Config) -> FastAPI:
     def etfs(limit: int | None = None, q: str | None = None) -> dict:
         doc = store.doc("etf_catalog")
         rows = list(doc.payload.get("rows", [])) if doc else []
+        if limit is not None and limit < 0:
+            raise HTTPException(status_code=400, detail="limit must be >= 0")
         query = (q or "").strip().lower()
         if query:
             rows = [
