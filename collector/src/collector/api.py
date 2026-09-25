@@ -105,11 +105,13 @@ def create_app(store: Store, cfg: Config) -> FastAPI:
                 r for r in rows
                 if query in str(r.get("symbol", "")).lower() or query in str(r.get("name", "")).lower()
             ]
+        total = len(rows)
         if limit is not None and limit >= 0:
             rows = rows[:limit]
         return {
             "rows": rows,
-            "count": len(rows),
+            "count": total,
+            "returned_count": len(rows),
             "updated_at": doc.updated_at if doc else None,
             "source": doc.source if doc else None,
         }

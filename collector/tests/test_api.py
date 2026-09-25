@@ -174,10 +174,15 @@ def test_etfs_endpoints(tmp_path):
     ]}, source="etfdb")
     listing = client.get("/api/etfs").json()
     assert listing["count"] == 2
+    assert listing["returned_count"] == 2
     assert listing["source"] == "etfdb"
     assert listing["rows"][0]["symbol"] == "SPY"
+    paged = client.get("/api/etfs?limit=1").json()
+    assert paged["count"] == 2
+    assert paged["returned_count"] == 1
     filtered = client.get("/api/etfs?q=ishares&limit=1").json()
     assert filtered["count"] == 1
+    assert filtered["returned_count"] == 1
     assert filtered["rows"][0]["symbol"] == "IVV"
     assert client.get("/api/etfs?limit=-1").status_code == 400
     one = client.get("/api/etfs/SPY").json()
