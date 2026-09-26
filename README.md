@@ -104,6 +104,8 @@ UI_PORT=9090 docker compose up --build
 `GET /healthz` reports, per fetcher, its last run, the source actually used,
 and any error. `GET /api/insights` returns the current automated digest and
 newsletter delivery state.
+`GET /api/etfs` returns the ETF catalog pulled from ETFDB (with `q` and `limit`
+query params), and `GET /api/etfs/{symbol}` returns a single ETF row.
 
 ### Gmail newsletter delivery
 
@@ -179,6 +181,7 @@ keyless.
 | [CBOE](https://www.cboe.com/) | Daily total + equity put/call ratios | — |
 | [AAII](https://www.aaii.com/sentimentsurvey) | Bull-bear sentiment spread (legacy `.xls`) | — |
 | [Yahoo Finance](https://finance.yahoo.com/) | Equity index closes and ratio series | — |
+| [ETFDB](https://etfdb.com/) via [pyetfdb-scraper](https://github.com/lvxhnat/pyetfdb-scraper) catalog export | ETF universe symbols, names, URLs, and trailing return fields | — |
 | [ECB Data Portal](https://data.ecb.europa.eu/) | Euro-area AAA yield curve (3M) | — |
 | [Bundesbank](https://www.bundesbank.de/) | German 10Y benchmark | — |
 | ForexFactory mirror | Macro release calendar | — |

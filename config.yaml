@@ -7,6 +7,7 @@ cadences:          # seconds between fetcher runs
   bonds: 3600
   macro: 3600      # job runs hourly; refresh decision logic inside (spec: 6h, hourly on release days)
   news: 600
+  etf: 86400
   defi: 900
   midnight: 900
   refs: 900
@@ -196,6 +197,8 @@ feeds:             # RSS bundle; a dead feed is skipped silently
   - { name: MarketWatch, url: "https://feeds.content.dowjones.io/public/rss/mw_topstories" }
   - { name: ECB,         url: "https://www.ecb.europa.eu/rss/press.html" }
   - { name: Fed,         url: "https://www.federalreserve.gov/feeds/press_all.xml" }
+
+etfdb_catalog_url: https://raw.githubusercontent.com/lvxhnat/pyetfdb-scraper/master/src/pyetfdb_scraper/data/etfdb.json
 
 zyfai_base: https://defiapi.zyf.ai/api/v2/opportunities
 midnight_base: https://api.morpho.org/v0/midnight   # v0 is real; docs-site "v1" 404s

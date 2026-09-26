@@ -23,6 +23,8 @@ def test_load_real_config():
     assert "us-cpi-yoy" in ids and "ez-hicp-yoy" in ids
     assert cfg.calendar_map[0].match == "Core CPI"  # order preserved
     assert cfg.feeds[0].name == "FT"
+    assert cfg.cadences["etf"] == 86400
+    assert cfg.etfdb_catalog_url.endswith("/pyetfdb_scraper/data/etfdb.json")
 
 
 def test_env_overrides_db_path(tmp_path, monkeypatch):
