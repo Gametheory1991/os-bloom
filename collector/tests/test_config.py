@@ -103,6 +103,10 @@ def test_cycle_config():
     assert by_id["pc-total"].cboe == "TOTAL PUT/CALL RATIO"
     assert by_id["aaii-spread"].aaii == "bull_bear_spread"
     assert by_id["spw-spx"].yahoo_ratio == ["RSP", "SPY"]
+    assert by_id["payrolls-yoy"].fred == "PAYEMS"
+    assert by_id["indpro-yoy"].fred == "INDPRO"
+    assert by_id["housing-starts"].fred == "HOUST"
+    assert by_id["stlfsi"].fred == "STLFSI4"
     assert by_id["m2-yoy"].transform == "yoy"
     assert by_id["vix"].transform == "none"  # default
     # every source entry has exactly one source key

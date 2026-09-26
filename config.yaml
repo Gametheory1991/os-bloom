@@ -78,6 +78,9 @@ cycle_series:      # market-cycle series (spec 2026-08-24); exactly one source k
   - { id: claims,       name: "Initial jobless claims",    unit: k,     fred: ICSA }
   - { id: jolts,        name: "Job openings (JOLTS)",      unit: k,     fred: JTSJOL }
   - { id: trucks,       name: "Heavy truck sales",         unit: m,     fred: HTRUCKSSAAR }  # FRED serves millions of units SAAR
+  - { id: payrolls-yoy, name: "Payrolls YoY",              unit: "%",   fred: PAYEMS, transform: yoy }
+  - { id: indpro-yoy,   name: "Industrial production YoY", unit: "%",   fred: INDPRO, transform: yoy }
+  - { id: housing-starts, name: "Housing starts",          unit: k,     fred: HOUST }
   - { id: umich,        name: "UMich consumer sentiment",  unit: idx,   fred: UMCSENT }
   - { id: m2-yoy,       name: "M2 YoY",                    unit: "%",   fred: M2SL, transform: yoy }
   - { id: m2-velocity,  name: "M2 velocity",               unit: ratio, fred: M2V }
@@ -94,6 +97,7 @@ cycle_series:      # market-cycle series (spec 2026-08-24); exactly one source k
   - { id: bbb-oas,      name: "US BBB OAS",                unit: "%",   fred: BAMLC0A4CBBB }
   - { id: ccc-oas,      name: "US CCC OAS",                unit: "%",   fred: BAMLH0A3HYC }
   - { id: nfci,         name: "Chicago Fed NFCI",          unit: idx,   fred: NFCI }
+  - { id: stlfsi,       name: "St. Louis Fed stress idx",  unit: idx,   fred: STLFSI4 }
   - { id: bank-lending, name: "Bank loans & leases YoY",   unit: "%",   fred: LOANS, transform: yoy }  # monthly; weekly TOTLL never aligns for the yoy transform
   # ---- PROFIT ---- (S&P EPS workbook is Akamai-403'd; FRED CP carries the cycle)
   - { id: corp-profits, name: "Corporate profits YoY",     unit: "%",   fred: CP, transform: yoy }
@@ -136,6 +140,9 @@ cycle_tabs:        # layout only; rows reference cycle_series ids
           - { series: claims }
           - { series: jolts }
           - { series: trucks }
+          - { series: payrolls-yoy }
+          - { series: indpro-yoy }
+          - { series: housing-starts }
           - { series: m2-yoy }
           - { series: m2-velocity }
           - { series: usd-broad }
@@ -159,6 +166,7 @@ cycle_tabs:        # layout only; rows reference cycle_series ids
           - { series: bbb-oas }
           - { series: ccc-oas }
           - { series: nfci }
+          - { series: stlfsi }
           - { series: bank-lending }
   - id: profit
     label: PROFIT
