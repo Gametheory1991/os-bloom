@@ -93,6 +93,21 @@ def create_app(store: Store, cfg: Config) -> FastAPI:
             cycle_tabs=cfg.cycle_tabs,
         )["panels"]["insights"]
 
+    @app.get("/api/predictions")
+    def predictions() -> dict:
+        insights_panel = build_dashboard(
+            store,
+            cfg.indexes,
+            now=datetime.now(timezone.utc),
+            cycle_series=cfg.cycle_series,
+            cycle_tabs=cfg.cycle_tabs,
+        )["panels"]["insights"]
+        return {
+            "digest_id": insights_panel.get("digest_id"),
+            "generated_at": insights_panel.get("generated_at"),
+            "predictions": insights_panel.get("predictions", []),
+        }
+
     @app.get("/healthz")
     def healthz() -> dict:
         fetchers = store.statuses()

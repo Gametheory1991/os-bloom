@@ -31,6 +31,7 @@ def test_build_digest_surfaces_anomalies_trends_and_coverage(tmp_path):
 
     assert digest["alerts"]
     assert digest["trends"]
+    assert digest["predictions"]
     assert digest["newsletter"]["coverage"]["tracked_series"] >= digest["newsletter"]["coverage"]["active_series"]
     assert digest["newsletter"]["coverage"]["upcoming_macro"] == 1
     assert digest["newsletter"]["coverage"]["headlines"] == 1

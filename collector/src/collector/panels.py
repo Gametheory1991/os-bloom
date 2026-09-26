@@ -190,6 +190,7 @@ def _insights_panel(store: Store) -> dict:
         return {
             "alerts": [],
             "trends": [],
+            "predictions": [],
             "newsletter": {"headline": "No automated digest yet", "bullets": [], "coverage": {}},
             "delivery": status.payload if status else {"enabled": False, "state": "disabled"},
             "digest_id": None,
@@ -201,6 +202,7 @@ def _insights_panel(store: Store) -> dict:
         "digest_id": doc.payload.get("digest_id"),
         "alerts": doc.payload.get("alerts", []),
         "trends": doc.payload.get("trends", []),
+        "predictions": doc.payload.get("predictions", []),
         "newsletter": doc.payload.get("newsletter", {}),
         "delivery": status.payload if status else {"enabled": False, "state": "disabled"},
         "generated_at": doc.payload.get("generated_at"),

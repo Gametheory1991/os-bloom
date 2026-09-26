@@ -27,6 +27,7 @@ export function renderInsights(panel) {
     <div class="news-meta">${deliveryBits}</div>
     ${renderRows("Alerts", panel.alerts ?? [], "alert")}
     ${renderRows("Trends", panel.trends ?? [], "trend")}
+    ${renderRows("Predictions", panel.predictions ?? [], "prediction")}
     <ul class="newsletter-list">${bullets}</ul>
   `;
 }

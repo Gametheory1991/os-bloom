@@ -37,6 +37,7 @@ This fork also generates an automated digest from the collected data:
 
 - anomaly alerts based on unusually large moves versus recent history
 - cross-series trend summaries using rolling 1M moves
+- a prediction engine that projects near-term 7d/30d direction from pulled history
 - a newsletter-style panel/API payload covering macro, news, DeFi, and rates
 - installable mobile/PWA support with browser notifications for fresh digests
 
@@ -102,8 +103,9 @@ UI_PORT=9090 docker compose up --build
 ```
 
 `GET /healthz` reports, per fetcher, its last run, the source actually used,
-and any error. `GET /api/insights` returns the current automated digest and
-newsletter delivery state.
+and any error. `GET /api/insights` returns the current automated digest,
+predictions, and newsletter delivery state. `GET /api/predictions` returns
+prediction rows only.
 
 ### Gmail newsletter delivery
 
